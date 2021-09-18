@@ -1,0 +1,14 @@
+{
+  "configurations": [
+    {
+      "name": "Example/Names",
+      "program": "${workspaceFolder}/example/names.js",
+      "request": "launch",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "type": "pwa-node"
+    }
+    
+  ]
+}

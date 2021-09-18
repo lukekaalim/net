@@ -1,0 +1,20 @@
+{
+  "workspaces": [
+    "example",
+    "http-server",
+    "http-client",
+    "net-description",
+    "http-constants"
+  ],
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lukekaalim/net.git"
+  },
+  "author": "Luke Kaalim",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/lukekaalim/net/issues"
+  },
+  "homepage": "https://github.com/lukekaalim/net#readme"
+}

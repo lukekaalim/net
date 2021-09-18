@@ -1,0 +1,31 @@
+{
+  "name": "@lukekaalim/http-client",
+  "version": "4.0.1",
+  "description": "Simple HTTP REST Client abstraction over some common HTTP implementations on javascript platforms",
+  "main": "main.js",
+  "author": "luke kaalim (luke@kaal.im)",
+  "license": "MIT",
+  "type": "module",
+  "devDependencies": {
+    "flow-bin": "^0.158.0"
+  },
+  "directories": {
+    "example": "example",
+    "test": "test"
+  },
+  "scripts": {
+    "postversion": "git push origin --follow-tags",
+    "test": "node entry.test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lukekaalim/http-client.git"
+  },
+  "bugs": {
+    "url": "https://github.com/lukekaalim/http-client/issues"
+  },
+  "homepage": "https://github.com/lukekaalim/http-client#readme",
+  "dependencies": {
+    "@lukekaalim/cast": "^2.0.0"
+  }
+}

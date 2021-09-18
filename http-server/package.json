@@ -1,0 +1,34 @@
+{
+  "name": "@lukekaalim/http-server",
+  "version": "11.0.0",
+  "description": "Simple utility library for defining a node server listener from a series of routes",
+  "main": "main.js",
+  "type": "module",
+  "scripts": {
+    "test": "cd ..; npm test",
+    "preversion": "npm test",
+    "postversion": "git push --follow-tags"
+  },
+  "author": "luke kaalim (luke@kaal.im)",
+  "license": "MIT",
+  "devDependencies": {
+    "flow-bin": "^0.158.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lukekaalim/server.git"
+  },
+  "keywords": [
+    "rest",
+    "http",
+    "server"
+  ],
+  "bugs": {
+    "url": "https://github.com/lukekaalim/server/issues"
+  },
+  "homepage": "https://github.com/lukekaalim/server#readme",
+  "dependencies": {
+    "@lukekaalim/api-models": "^3.0.2",
+    "@lukekaalim/cast": "^1.0.0"
+  }
+}
