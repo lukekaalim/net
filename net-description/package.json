@@ -1,6 +1,6 @@
 {
   "name": "@lukekaalim/net-description",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "Describe various internet resources, for consuming or implementing.",
   "main": "main.js",
   "type": "module",
