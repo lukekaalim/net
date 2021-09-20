@@ -5,9 +5,7 @@
   "main": "main.js",
   "type": "module",
   "scripts": {
-    "test": "cd ..; npm test",
-    "preversion": "npm test",
-    "postversion": "git push --follow-tags"
+    "postversion": "../postversion.sh"
   },
   "author": "luke kaalim (luke@kaal.im)",
   "license": "MIT",
