@@ -31,3 +31,4 @@ export * from './responses.js';
 
 export * from './json.js';
 export * from './stream.js';
+export * from './utils.js';

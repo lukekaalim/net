@@ -1,6 +1,6 @@
 // @flow strict
 /*:: import type { ResourceDescription } from '@lukekaalim/net-description';*/
-import { createJSONResourceRoutes, getAuthorization, createRouteListener } from '@lukekaalim/http-server';
+import { createJSONResourceRoutes, getAuthorization, createRouteListener, listenServer } from '@lukekaalim/http-server';
 import { createJSONResourceClient, createNodeClient, createAuthorizedClient } from '@lukekaalim/http-client';
 import { request, createServer } from 'http';
 import { castString, createArrayCaster } from "@lukekaalim/cast";
@@ -26,7 +26,7 @@ export const namesDescription/*: ResourceDescription<NameAPI['/names']>*/ = {
   },
 };
 
-const createNameServer = async () => {
+const createNamesServer = () => {
   const names = [];
   const token = Math.floor(Math.random() * 100).toString();
   
@@ -44,7 +44,6 @@ const createNameServer = async () => {
   });
   const listener = createRouteListener(routes);
   const server = createServer(listener);
-  await new Promise(res => server.listen(0, 'localhost', res));
   return { server, token };
 }
 const createNamesClient = (origin, token) => {
@@ -64,10 +63,11 @@ const createNamesClient = (origin, token) => {
 
 
 const main = async () => {
-  const { server, token } = await createNameServer();
-  const { address, port } = server.address();
-  const client = createNamesClient(`http://${address}:${port}`, token);
-  console.log(`http://${address}:${port}`);
+  const { server, token } = createNamesServer();
+  const { origin } = await listenServer(server, 0, 'localhost');
+
+  const client = createNamesClient(origin, token);
+  console.log(origin);
 
   try {
     await client.addName('Luka');
