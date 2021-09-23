@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash -e
 
 name=$(cat package.json | jq .name -r)
 version=$(cat package.json | jq .version -r)
