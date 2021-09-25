@@ -1,6 +1,6 @@
 // @flow strict
 /*:: import type { ResourceDescription } from '@lukekaalim/net-description';*/
-import { createJSONResourceRoutes, getAuthorization, createRouteListener, listenServer } from '@lukekaalim/http-server';
+import { createJSONResourceRoutes, createRouteListener, listenServer, getAuthorization } from '@lukekaalim/http-server';
 import { createJSONResourceClient, createNodeClient, createAuthorizedClient } from '@lukekaalim/http-client';
 import { request, createServer } from 'http';
 import { castString, createArrayCaster } from "@lukekaalim/cast";
@@ -36,10 +36,10 @@ const createNamesServer = () => {
     },
     POST: async ({ body: newName, routeRequest: { headers } }) => {
       const auth = getAuthorization(headers);
-      if (auth.type !== 'bearer' || auth.token !== token)
-        return { status: 401 };
+      if (!auth || auth.type !== 'bearer' || auth.token !== token)
+        return { status: 401, body: [] };
       names.push(newName);
-      return { body: names };
+      return { status: 200, body: names };
     }
   });
   const listener = createRouteListener(routes);
@@ -76,7 +76,7 @@ const main = async () => {
     await client.addName('Ka\' Aulim');
     console.log(await client.getAllNames());
   } catch (error) {
-    console.log(error.message);
+    console.error(error);
   } finally {
     server.close();
   }
