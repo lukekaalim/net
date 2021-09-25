@@ -1,6 +1,6 @@
 {
   "name": "@lukekaalim/http-client",
-  "version": "5.1.0",
+  "version": "5.1.1",
   "description": "Simple HTTP REST Client abstraction over some common HTTP implementations on javascript platforms",
   "main": "main.js",
   "author": "luke kaalim (luke@kaal.im)",
