@@ -3,6 +3,8 @@
 /*:: import type { HTTPClient } from './main.js'; */
 /*:: import type { HTTPMethod } from './http.js'; */
 
+import { encodeStringToArrayBuffer } from "./encoding.js";
+
 /*::
 export type ResourceMethodHandler<T: ResourceTypeArg[string]> = (request?: { query?: T['query'], body?: T['request'] }) =>
   Promise<{| body: T['response'], status: number |}>
@@ -35,15 +37,15 @@ export const createJSONResourceClient = /*:: <T: ResourceTypeArg>*/(
       const searchParams = new URLSearchParams(queryEntries);
       const url = new URL(desc.path, baseURL);
       url.search = searchParams.toString();
-      const requestBodyString = JSON.stringify(requestBody);
+      const requestBodyBuffer = encodeStringToArrayBuffer(JSON.stringify(requestBody) || '')
       try {
         const { body: responseBodyString, headers, status } = await client.sendRequest({
           method, url,
           headers: {
             'content-type': 'application/json',
-            'content-length': Buffer.from(requestBodyString || '').byteLength.toString(),
+            'content-length': requestBodyBuffer.byteLength.toString(),
           },
-          body: requestBodyString
+          body: requestBodyBuffer
         });
 
         const responseBody = toResponseBody && toResponseBody(JSON.parse(responseBodyString));
