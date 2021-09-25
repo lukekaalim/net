@@ -26,7 +26,7 @@
   },
   "homepage": "https://github.com/lukekaalim/server#readme",
   "dependencies": {
-    "@lukekaalim/api-models": "^3.0.2",
-    "@lukekaalim/cast": "^1.0.0"
+    "@lukekaalim/cast": "^1.0.0",
+    "@lukekaalim/net-description": "^1.0.3"
   }
 }

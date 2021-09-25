@@ -1,13 +1,12 @@
 // @flow strict
 /*:: import type { Cast, JSONValue } from '@lukekaalim/cast'; */ 
-/*:: import type { ResourceDescription, ResourceTypeArg } from '@lukekaalim/net-description';*/
+/*:: import type { ResourceDescription, ResourceTypeArg, Authorization } from '@lukekaalim/net-description';*/
 
 /*:: import type { HTTPMethod, HTTPStatus, HTTPHeaders } from './http'; */
 /*:: import type { Route, RouteHandler, RouteRequest, RouteResponse } from './route'; */
 
 /*:: import type { CacheOptions } from './cache'; */
 /*:: import type { Content } from './content'; */
-/*:: import type { Authorization } from './authorization'; */
 /*:: import type { AccessOptions } from './access'; */
 
 import { createRoute } from './route.js';

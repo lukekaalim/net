@@ -9,7 +9,6 @@ export type * from './content';
 export type * from './responses';
 
 export type * from './access';
-export type * from './authorization';
 export type * from './cache';
 
 export type * from './listener';
@@ -25,8 +24,8 @@ export * from './route.js';
 export * from './resource.js';
 
 export * from './access.js';
-export * from './authorization.js';
 export * from './content.js';
+export * from './authorization.js';
 export * from './responses.js';
 
 export * from './json.js';
