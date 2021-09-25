@@ -27,6 +27,6 @@
   "homepage": "https://github.com/lukekaalim/server#readme",
   "dependencies": {
     "@lukekaalim/cast": "^1.0.0",
-    "@lukekaalim/net-description": "^1.0.3"
+    "@lukekaalim/net-description": "^1.1.0"
   }
 }
