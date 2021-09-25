@@ -1,56 +1,17 @@
 // @flow strict
+/*:: import type { Authorization } from '@lukekaalim/net-description'; */
 /*:: import type { HTTPClient } from './main.js'; */
-import { toBase64 } from './base64.js';
+import { encodeAuthorizationHeader } from '@lukekaalim/net-description';
 
-/*::
-export type Authorization =
-  | {| type: 'basic', username: string, password: string |}
-  | {| type: 'none' |}
-  | {| type: 'bearer', token: string |}
-*/
 
-export const createBasicAuthorization = (username/*: string*/, password/*: string*/)/*: Authorization*/ => ({
-  type: 'basic',
-  username,
-  password,
-});
-
-export const createBearerAuthorization = (token/*: string*/)/*: Authorization*/ => ({
-  type: 'bearer',
-  token,
-});
-
-export const createNoneAuthorization = ()/*: Authorization*/ => ({
-  type: 'none'
-});
-
-export const createAuthorizationValue = (authorization/*: Authorization*/)/*: null | string*/ => {
-  switch (authorization.type) {
-    default:
-    case 'none':
-      return null;
-    case 'basic':
-      return `Basic ${toBase64(authorization.username + ':' + authorization.password)}`;
-    case 'bearer':
-      return `Bearer ${authorization.token}`;
-  }
-};
-
-export const createAuthorizedClient = (client/*: HTTPClient*/, authorization/*: Authorization*/)/*: HTTPClient*/ => {
-  const auth = createAuthorizationValue(authorization);
+export const createAuthorizedClient = (client/*: HTTPClient*/, authorization/*: ?Authorization*/ = null)/*: HTTPClient*/ => {
+  const auth = authorization && encodeAuthorizationHeader(authorization);
   const sendRequest = async (request) => {
     const headers = {
       ...request.headers,
-      ...(auth ? { Authorization: auth } : {}),
+      ...(auth ? { 'authorization': auth } : {}),
     };
-    const response = await client.sendRequest({ ...request, headers });
-    switch (response.status) {
-      case 401:
-        throw new Error(`Unauthorized Request`);
-      case 403:
-        throw new Error(`Forbidden Request`);
-    }
-    return response;
+    return client.sendRequest({ ...request, headers });
   };
 
   return {

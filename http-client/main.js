@@ -26,7 +26,6 @@ export type {
   HTTPMethod,
   HTTPStatus,
 };
-export type * from './authorization.js';
 */
 
 export * from './node.js';

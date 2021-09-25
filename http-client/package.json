@@ -25,6 +25,7 @@
   },
   "homepage": "https://github.com/lukekaalim/http-client#readme",
   "dependencies": {
-    "@lukekaalim/cast": "^2.0.0"
+    "@lukekaalim/cast": "^2.0.0",
+    "@lukekaalim/net-description": "^1.0.3"
   }
 }

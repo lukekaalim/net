@@ -35,23 +35,19 @@ export const createJSONResourceClient = /*:: <T: ResourceTypeArg>*/(
       const searchParams = new URLSearchParams(queryEntries);
       const url = new URL(desc.path, baseURL);
       url.search = searchParams.toString();
-      const requesyBodyString = JSON.stringify(requestBody);
+      const requestBodyString = JSON.stringify(requestBody);
       try {
-        const { body: responseBody, headers, status } = await client.sendRequest({
+        const { body: responseBodyString, headers, status } = await client.sendRequest({
           method, url,
           headers: {
             'content-type': 'application/json',
-            'content-length': Buffer.from(requesyBodyString || '').byteLength.toString(),
+            'content-length': Buffer.from(requestBodyString || '').byteLength.toString(),
           },
-          body: requesyBodyString
+          body: requestBodyString
         });
-        if (status !== 200)
-          throw new Error(`Oh no ${status}`);
 
-        if (toResponseBody)
-          return { body: toResponseBody(JSON.parse(responseBody)), status };
-          
-        return ({ status }/*: any*/);
+        const responseBody = toResponseBody && toResponseBody(JSON.parse(responseBodyString));
+        return ({ body: responseBody, status }/*: any*/);
       } catch (error) {
         throw error;
       }
