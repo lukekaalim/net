@@ -1,6 +1,6 @@
 {
   "name": "@lukekaalim/http-server",
-  "version": "12.1.0",
+  "version": "12.2.0",
   "description": "Simple utility library for defining a node server listener from a series of routes",
   "main": "main.js",
   "type": "module",
