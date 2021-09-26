@@ -57,12 +57,13 @@ export const createResourceRoutes = (resource/*: HTTPResource*/)/*: Route[]*/ =>
 /*::
 export type ResourceRequest<Query, Body> = {
   routeRequest: RouteRequest,
+  headers: HTTPHeaders,
   query: Query,
   body: Body,
 };
 export type ResourceResponse<Body> = {
   body?: Body,
-  status?: HTTPStatus,
+  status: HTTPStatus,
 };
 
 type RequestHandler<T> = (request: ResourceRequest<T['query'], T['request']>) =>
@@ -70,6 +71,9 @@ type RequestHandler<T> = (request: ResourceRequest<T['query'], T['request']>) =>
   | Promise<ResourceResponse<T['response']>>
 
 type ResourceImplementation<T> = {|
+  access?: AccessOptions,
+  cache?: CacheOptions,
+
   GET?:     RequestHandler<T['GET']>,
   POST?:    RequestHandler<T['POST']>,
   DELETE?:  RequestHandler<T['DELETE']>,
@@ -93,9 +97,10 @@ export const createJSONResourceRoutes = /*:: <T: ResourceTypeArg>*/(
       const requestBody = toRequestBody && toRequestBody(await readJSONBody(routeRequest.incoming, routeRequest.headers));
       const {
         body: responseBody,
-        status = 200
+        status,
       } = await methodImplementation({
         query,
+        headers: routeRequest.headers,
         body: requestBody,
         routeRequest
       });
@@ -113,6 +118,8 @@ export const createJSONResourceRoutes = /*:: <T: ResourceTypeArg>*/(
   ].map(([a, b]) => b ? [a, b] : null).filter(Boolean));
 
   return createResourceRoutes({
+    access: implementation.access,
+    cache: implementation.cache,
     path: description.path,
     methods,
   });
