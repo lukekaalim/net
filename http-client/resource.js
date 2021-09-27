@@ -1,13 +1,24 @@
 // @flow strict
 /*:: import type { ResourceDescription, ResourceMethodDescription, ResourceTypeArg } from '@lukekaalim/net-description'; */
 /*:: import type { HTTPClient } from './main.js'; */
-/*:: import type { HTTPMethod } from './http.js'; */
+/*:: import type { HTTPMethod, HTTPHeaders } from './http.js'; */
 
 import { encodeStringToArrayBuffer } from "./encoding.js";
+import { createURL } from './url.js';
+import { createJSONContent } from './content.js';
 
 /*::
-export type ResourceMethodHandler<T: ResourceTypeArg[string]> = (request?: { query?: T['query'], body?: T['request'] }) =>
-  Promise<{| body: T['response'], status: number |}>
+export type ResourceMethodRequest<T> = {|
+  query?: T['query'],
+  body?: T['request'],
+  headers?: { +[string]: ?string }
+|};
+export type ResourceMethodResponse<T> = {|
+  body: T['response'],
+  status: number,
+  headers: HTTPHeaders
+|};
+export type ResourceMethodHandler<T: ResourceTypeArg[string]> = (request?: ResourceMethodRequest<T>) => Promise<ResourceMethodResponse<T>>
 
 export type ResourceClient<T> = {|
   GET:    ResourceMethodHandler<T['GET']>,
@@ -30,26 +41,35 @@ export const createJSONResourceClient = /*:: <T: ResourceTypeArg>*/(
     if (!methodDesc)
       return () => { throw new Error('Method not implemented') };
     const { toResponseBody } = methodDesc;
-    const methodHandler = async ({ query = {}, body: requestBody } = {}) => {
-      const queryEntries = Object.entries(query)
-        .map(([p, v]) => typeof v === 'string' ? [p, v] : null)
-        .filter(Boolean);
-      const searchParams = new URLSearchParams(queryEntries);
-      const url = new URL(desc.path, baseURL);
-      url.search = searchParams.toString();
-      const requestBodyBuffer = encodeStringToArrayBuffer(JSON.stringify(requestBody) || '')
+
+    const methodHandler = async ({ query = {}, body: requestBody, headers: requestHeaders = {} } = {}) => {
+      const url = createURL(query, desc.path, baseURL);
+      const { contentHeaders, bufferBody } = createJSONContent(requestBody);
+      const stringRequestHeaders = Object.fromEntries(
+        Object.entries(requestHeaders)
+          .map(([p, v]) => typeof v === 'string' ? [p, v] : null)
+          .filter(Boolean)
+      );
+
       try {
-        const { body: responseBodyString, headers, status } = await client.sendRequest({
+        const request = {
           method, url,
           headers: {
-            'content-type': 'application/json',
-            'content-length': requestBodyBuffer.byteLength.toString(),
+            ...stringRequestHeaders,
+            ...contentHeaders,
           },
-          body: requestBodyBuffer
-        });
+          body: bufferBody
+        };
+        const response = await client.sendRequest(request);
+        const {
+          body: responseBodyString,
+          headers: responseHeaders,
+          status
+        } = response;
 
         const responseBody = toResponseBody && toResponseBody(JSON.parse(responseBodyString));
-        return ({ body: responseBody, status }/*: any*/);
+
+        return ({ body: responseBody, status, headers: responseHeaders }/*: any*/);
       } catch (error) {
         throw error;
       }

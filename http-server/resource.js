@@ -62,6 +62,7 @@ export type ResourceRequest<Query, Body> = {
   body: Body,
 };
 export type ResourceResponse<Body> = {
+  headers?: HTTPHeaders,
   body?: Body,
   status: HTTPStatus,
 };
@@ -98,13 +99,14 @@ export const createJSONResourceRoutes = /*:: <T: ResourceTypeArg>*/(
       const {
         body: responseBody,
         status,
+        headers: responseHeaders = {}
       } = await methodImplementation({
         query,
         headers: routeRequest.headers,
         body: requestBody,
         routeRequest
       });
-      return createJSONResponse(status, responseBody || null);
+      return createJSONResponse(status, responseBody || null, responseHeaders);
     };
     return routeHandler;
   };

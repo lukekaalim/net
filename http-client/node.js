@@ -30,7 +30,7 @@ export const createNodeClient = (nodeRequest/*: request*/)/*: HTTPClient*/ => {
           const body = await readStream(response);
           resolve({
             status: response.statusCode,
-            headers: (Object.entries(response.headers)/*: any*/),
+            headers: response.headers,
             body,
           });
         } catch (error) {

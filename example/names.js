@@ -31,10 +31,11 @@ const createNamesServer = () => {
   const token = Math.floor(Math.random() * 100).toString();
   
   const routes = createJSONResourceRoutes(namesDescription, {
-    GET: async () => {
-      return { body: names };
+    GET: async ({ headers }) => {
+      console.log(headers);
+      return { status: 200, body: names, headers: { howdy: 'friends' } };
     },
-    POST: async ({ body: newName, routeRequest: { headers } }) => {
+    POST: async ({ body: newName, headers }) => {
       const auth = getAuthorization(headers);
       if (!auth || auth.type !== 'bearer' || auth.token !== token)
         return { status: 401, body: [] };
@@ -51,7 +52,8 @@ const createNamesClient = (origin, token) => {
   const resource = createJSONResourceClient(namesDescription, httpClient, origin);
   
   const getAllNames = async () => {
-    const { body: names } = await resource.GET();
+    const { body: names, headers } = await resource.GET({ headers: { hello: 'world' }});
+    console.log(headers);
     return names;
   };
   const addName = async (newName) => {
