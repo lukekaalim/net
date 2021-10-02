@@ -1,7 +1,8 @@
 // @flow strict
 /*::
 import type { Readable } from 'stream';
-import type { HTTPMethod, HTTPIncomingRequest, HTTPOutgoingResponse, HTTPHeaders, HTTPStatus } from './http';
+import type { HTTPMethod, HTTPIncomingRequest, HTTPOutgoingResponse, HTTPHeaders } from './http';
+import type { HTTPStatus } from '@lukekaalim/net-description';
 import type { JSONValue } from './json';
 */
 import { toMethod, statusCodes } from './http.js';

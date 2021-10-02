@@ -5,12 +5,14 @@ export const listenServer = async (
   server/*: Server*/,
   port/*: number*/ = 0,
   host/*: string*/ = 'localhost'
-)/*: Promise<{ origin: string }>*/ => {
+)/*: Promise<{ host: string, httpOrigin: string, wsOrigin: string }>*/ => {
   return new Promise(res => {
     server.listen(port, host, () => {
       const { address, port } = server.address();
-      const origin = `http://${address}:${port}`;
-      res({ origin });
+      const host = `${address}:${port}`;
+      const httpOrigin = `http://${host}`;
+      const wsOrigin = `ws://${host}`;
+      res({ host, httpOrigin, wsOrigin });
     });
   });
 };

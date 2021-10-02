@@ -1,6 +1,6 @@
 // @flow strict
 /*:: import type { Cast, JSONValue } from '@lukekaalim/cast'; */ 
-/*:: import type { ResourceDescription, ResourceTypeArg, Authorization } from '@lukekaalim/net-description';*/
+/*:: import type { ResourceDescription, Resource, Authorization } from '@lukekaalim/net-description';*/
 
 /*:: import type { HTTPMethod, HTTPStatus, HTTPHeaders } from './http'; */
 /*:: import type { Route, RouteHandler, RouteRequest, RouteResponse } from './route'; */
@@ -9,11 +9,12 @@
 /*:: import type { Content } from './content'; */
 /*:: import type { AccessOptions } from './access'; */
 
+import { HTTP_METHOD, HTTP_STATUS } from '@lukekaalim/net-description';
+
 import { createRoute } from './route.js';
 
 import { createCacheHeaders } from './cache.js';
 import { createAccessHeaders } from './access.js';
-import { statusCodes, toMethod } from './http.js';
 
 import { readJSONBody } from './content.js';
 import { createJSONResponse } from './responses.js';
@@ -31,12 +32,42 @@ export type HTTPResource = {
 };
 */
 
+
 export const createResourceRoutes = (resource/*: HTTPResource*/)/*: Route[]*/ => {
-  const defaultMethods/*: { [method: HTTPMethod]: RouteHandler }*/ = {
-    OPTIONS: (request) => ({ status: statusCodes.noContent, body: null, headers: {} }),
+  const allowedMethods = Object.keys(resource.methods);
+
+  const disallowedMethodHandler = (request) => {
+    return {
+      status: HTTP_STATUS.method_not_allowed,
+      body: null,
+      headers: {
+        ...createCacheHeaders(resource.cache),
+        ...createAccessHeaders(request.headers, resource.access),
+        allow: allowedMethods.join(',')
+      }
+    };
   };
-  const createRouteHandler = (method) => async (request) => {
-    const response = await allMethods[method](request);
+  const optionsHandler = (request) => {
+    return {
+      status: HTTP_STATUS.no_content,
+      body: null,
+      headers: {
+        ...createCacheHeaders(resource.cache),
+        ...createAccessHeaders(request.headers, resource.access),
+        allow: allowedMethods.join(',')
+      }
+    };
+  }
+
+  const defaultMethods/*: [string, RouteHandler][]*/ = [
+    ...Object.values(HTTP_METHOD).map(method => [(method/*: any*/), disallowedMethodHandler]),
+    [HTTP_METHOD.options, optionsHandler]
+  ];
+
+  // Wrap the provided route handler with
+  // the headers that come with a resource
+  const createRouteHandler = (routeHandler) => async (request) => {
+    const response = await routeHandler(request);
     return {
       ...response,
       headers: {
@@ -46,11 +77,19 @@ export const createResourceRoutes = (resource/*: HTTPResource*/)/*: Route[]*/ =>
       }
     };
   };
-  const allMethods = { ...defaultMethods, ...resource.methods };
-  return Object
-    .keys(allMethods)
-    .map(toMethod)
-    .map((method) => createRoute(method, resource.path, createRouteHandler(method)))
+
+  const implementedMethods/*: [string, RouteHandler][]*/ = [
+    ...defaultMethods,
+    ...Object.entries(resource.methods)
+      .map(([method, routeHandler]) => [method, createRouteHandler((routeHandler/*: any*/))]),
+  ];
+
+  return [...new Map(implementedMethods)]
+    .map(([method, routeHandler]) => ({
+      handler: routeHandler,
+      method: (method/*: any*/),
+      path: resource.path
+    }));
 };
 
 
@@ -83,7 +122,7 @@ type ResourceImplementation<T> = {|
 |};
 */
 
-export const createJSONResourceRoutes = /*:: <T: ResourceTypeArg>*/(
+export const createJSONResourceRoutes = /*:: <T: Resource>*/(
   description/*: ResourceDescription<T>*/,
   implementation/*: ResourceImplementation<T>*/
 )/*: Route[]*/ => {
