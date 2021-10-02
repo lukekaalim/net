@@ -5,7 +5,9 @@
     "http-server",
     "http-client",
     "net-description",
-    "http-constants"
+    "http-constants",
+    "ws-client",
+    "ws-server"
   ],
   "private": true,
   "repository": {
