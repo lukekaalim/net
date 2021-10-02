@@ -2,13 +2,13 @@
 /*:: import type { Cast } from '@lukekaalim/cast'; */ 
 
 /*::
-export type ResourceMethodDescription<T> = {
+export type ResourceMethodDescription<T = any> = {
   toQuery?:        Cast<T['query']>,
   toRequestBody?:  Cast<T['request']>,
   toResponseBody?: Cast<T['response']>,
 };
 
-export type ResourceDescription<T> = {|
+export type ResourceDescription<T = any> = {|
   path:    string,
 
   GET?:     ?ResourceMethodDescription<T['GET']>,
@@ -18,11 +18,13 @@ export type ResourceDescription<T> = {|
   PATCH?:   ?ResourceMethodDescription<T['PATCH']>,
 |}
 
-export type ResourceTypeArg = {
-  [string]: {
-    query: any,
-    request: any,
-    response: any,
-  }
+export type ResourceMethod<Query = any, Request = any, Response = any> = {
+  query: Query,
+  request: Request,
+  response: Response,
+};
+
+export type Resource = {
+  [string]: ResourceMethod<any>
 };
 */
