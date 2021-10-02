@@ -1,5 +1,5 @@
 // @flow strict
-/*:: import type { ResourceDescription, ResourceMethodDescription, ResourceTypeArg } from '@lukekaalim/net-description'; */
+/*:: import type { ResourceDescription, ResourceMethodDescription, Resource } from '@lukekaalim/net-description'; */
 /*:: import type { HTTPClient } from './main.js'; */
 /*:: import type { HTTPMethod, HTTPHeaders } from './http.js'; */
 
@@ -18,7 +18,7 @@ export type ResourceMethodResponse<T> = {|
   status: number,
   headers: HTTPHeaders
 |};
-export type ResourceMethodHandler<T: ResourceTypeArg[string]> = (request?: ResourceMethodRequest<T>) => Promise<ResourceMethodResponse<T>>
+export type ResourceMethodHandler<T: Resource[string]> = (request?: ResourceMethodRequest<T>) => Promise<ResourceMethodResponse<T>>
 
 export type ResourceClient<T> = {|
   GET:    ResourceMethodHandler<T['GET']>,
@@ -29,12 +29,12 @@ export type ResourceClient<T> = {|
 |};
 */
 
-export const createJSONResourceClient = /*:: <T: ResourceTypeArg>*/(
+export const createJSONResourceClient = /*:: <T: Resource>*/(
   desc/*: ResourceDescription<T>*/,
   client/*: HTTPClient*/,
   baseURL/*: string*/,
 )/*: ResourceClient<T>*/ => {
-  const createMethodHandler = /*:: <M: ResourceTypeArg[string]>*/(
+  const createMethodHandler = /*:: <M: Resource[string]>*/(
     method/*: HTTPMethod*/,
     methodDesc/*: ?ResourceMethodDescription<M>*/
   )/*: ResourceMethodHandler<M>*/ => {
