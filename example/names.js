@@ -23,7 +23,7 @@ export const namesDescription/*: ResourceDescription<NameAPI['/names']>*/ = {
   POST: {
     toResponseBody: createArrayCaster(castString),
     toRequestBody: castString
-  },
+  }
 };
 
 const createNamesServer = () => {
@@ -47,6 +47,7 @@ const createNamesServer = () => {
   const server = createServer(listener);
   return { server, token };
 }
+
 const createNamesClient = (origin, token) => {
   const httpClient = createAuthorizedClient(createNodeClient(request), { type: 'bearer', token });
   const resource = createJSONResourceClient(namesDescription, httpClient, origin);
@@ -66,10 +67,10 @@ const createNamesClient = (origin, token) => {
 
 const main = async () => {
   const { server, token } = createNamesServer();
-  const { origin } = await listenServer(server, 0, 'localhost');
+  const { httpOrigin } = await listenServer(server, 0, 'localhost');
 
-  const client = createNamesClient(origin, token);
-  console.log(origin);
+  const client = createNamesClient(httpOrigin, token);
+  console.log(httpOrigin);
 
   try {
     await client.addName('Luka');

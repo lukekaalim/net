@@ -18,6 +18,9 @@
   },
   "homepage": "https://github.com/lukekaalim/net#readme",
   "dependencies": {
-    "@lukekaalim/cast": "^2.0.0"
+    "@lukekaalim/cast": "^4.0.0",
+    "@lukekaalim/ws-client": "^1.0.0",
+    "@lukekaalim/ws-server": "^1.0.0",
+    "ws": "^8.2.2"
   }
 }
