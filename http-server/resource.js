@@ -1,8 +1,7 @@
 // @flow strict
 /*:: import type { Cast, JSONValue } from '@lukekaalim/cast'; */ 
-/*:: import type { ResourceDescription, Resource, Authorization } from '@lukekaalim/net-description';*/
+/*:: import type { ResourceDescription, Resource, Authorization, HTTPStatus, HTTPMethod, HTTPHeaders } from '@lukekaalim/net-description';*/
 
-/*:: import type { HTTPMethod, HTTPStatus, HTTPHeaders } from './http'; */
 /*:: import type { Route, RouteHandler, RouteRequest, RouteResponse } from './route'; */
 
 /*:: import type { CacheOptions } from './cache'; */
@@ -135,16 +134,18 @@ export const createJSONResourceRoutes = /*:: <T: Resource>*/(
     const routeHandler = async (routeRequest) => {
       const query = toQuery && toQuery(Object.fromEntries(routeRequest.query.entries()));
       const requestBody = toRequestBody && toRequestBody(await readJSONBody(routeRequest.incoming, routeRequest.headers));
-      const {
-        body: responseBody,
-        status,
-        headers: responseHeaders = {}
-      } = await methodImplementation({
+      const methodRequest = {
         query,
         headers: routeRequest.headers,
         body: requestBody,
         routeRequest
-      });
+      };
+      const methodResponse = await methodImplementation(methodRequest);
+      const {
+        body: responseBody,
+        status,
+        headers: responseHeaders = {}
+      } = methodResponse;
       return createJSONResponse(status, responseBody || null, responseHeaders);
     };
     return routeHandler;

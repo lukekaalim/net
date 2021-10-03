@@ -1,5 +1,5 @@
 // @flow strict
-/*:: import type { HTTPStatus, HTTPHeaders } from '../http'; */
+/*:: import type { HTTPStatus, HTTPHeaders } from '@lukekaalim/net-description'; */
 /*:: import type { RouteResponse } from '../route'; */
 import { statusCodes } from '../http.js';
 const { noContent } = statusCodes;

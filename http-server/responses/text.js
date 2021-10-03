@@ -1,5 +1,5 @@
 // @flow strict
-/*:: import type { HTTPStatus, HTTPHeaders } from '../http'; */
+/*:: import type { HTTPStatus, HTTPHeaders } from '@lukekaalim/net-description'; */
 /*:: import type { RouteResponse } from '../route'; */
 
 export const createPlainResponse = (

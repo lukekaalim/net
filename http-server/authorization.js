@@ -1,6 +1,5 @@
 // @flow strict
-/*:: import type { Authorization } from '@lukekaalim/net-description'; */
-/*:: import type { HTTPHeaders } from './http.js'; */
+/*:: import type { Authorization, HTTPHeaders } from '@lukekaalim/net-description'; */
 import { decodeAuthorizationHeader } from "@lukekaalim/net-description";
 
 export const getAuthorization = (headers/*: HTTPHeaders*/)/*: ?Authorization*/ => {
