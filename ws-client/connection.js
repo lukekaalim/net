@@ -1,6 +1,5 @@
 // @flow strict
 /*::
-import type { WebSocket as WSWebSocket } from "ws";
 import type { ConnectionDescription, Connection } from '@lukekaalim/net-description';
 import { URLSearchParams } from "url";
 */
@@ -13,27 +12,36 @@ export type ClientConnection<T: Connection<>> = {
   }) => Promise<{|
     send: (message: T['client']) => void,
     close: () => Promise<void>,
-    socket: WSWebSocket | WebSocket,
+    socket: WebSocket,
   |}>
 };
 */
 
 export const createJSONConnectionClient = /*:: <T: Connection<>>*/(
-  WebSocket/*: Class<WebSocket> | Class<WSWebSocket>*/,
+  WebSocket/*: Class<WebSocket>*/,
   description/*: ConnectionDescription<T>*/,
   baseURL/*: URL | string*/,
 )/*: ClientConnection<T>*/ => {
+
+  const {
+    castServerMessage = a => a
+  } = description;
 
   const connect = async ({ query, recieve = _ => {} }) => {
     const url = new URL(description.path, baseURL);
     url.search = new URLSearchParams(query).toString();
     const socket = new WebSocket(url.href, [description.subprotocol].filter(Boolean));
 
-    socket.addEventListener('message', ({ data }/*: MessageEvent | { data: Uint8Array }*/) => {
+    socket.addEventListener('message', async ({ data }/*: MessageEvent | { data: Uint8Array }*/) => {
+      if (typeof Blob !== 'undefined' && data instanceof Blob)
+        return recieve(castServerMessage(JSON.parse(await data.text())));
+
       if (typeof data === 'string')
-        return recieve(JSON.parse(data))
-      if (data instanceof Buffer)
-        return recieve(JSON.parse(data.toString('utf-8')))
+        return recieve(castServerMessage(JSON.parse(data)))
+
+      if (typeof Buffer !== 'undefined' && data instanceof Buffer)
+        return recieve(castServerMessage(JSON.parse(data.toString('utf-8'))))
+        
       throw new Error();
     });
     const send = (message) => {
