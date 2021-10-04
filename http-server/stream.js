@@ -43,3 +43,17 @@ export const writeStream = (writable/*: Writable*/, value/*: null | string | Buf
   else
     value.pipe(writable);
 };
+
+export const readStreamBytes = async (readable/*: Readable*/, length/*: ?number*/ = null)/*: Promise<Buffer>*/ => {
+  if (length === 0)
+    return Buffer.alloc(0);
+  
+  const chunks = [];
+  for await (const chunk of readable) {
+    if (chunk instanceof Buffer) {
+      chunks.push(chunk);
+    }
+  }
+
+  return Buffer.concat(chunks, length || undefined);
+};

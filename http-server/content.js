@@ -3,7 +3,7 @@
 /*:: import type { HTTPHeaders, HTTPIncomingRequest } from './http'; */
 /*:: import type { RouteRequest } from './route'; */
 /*:: import type { JSONValue } from './json'; */
-import { readStream } from './stream.js';
+import { readStream, readStreamBytes } from './stream.js';
 import { parse } from './json.js';
 
 /*::
@@ -29,6 +29,10 @@ export const readJSONBody = async (incoming/*: Readable*/, headers/*: HTTPHeader
 export const readTextBody = async (incoming/*: Readable*/, headers/*: HTTPHeaders*/)/*: Promise<string>*/ => {
   const content = getContent(headers);
   return await readStream(incoming, content.length);
+};
+export const readBufferBody = async (incoming/*: Readable*/, headers/*: HTTPHeaders*/)/*: Promise<Buffer>*/ => {
+  const content = getContent(headers);
+  return await readStreamBytes(incoming, content.length);
 };
 
 export const readBody = async (incoming/*: Readable*/, headers/*: HTTPHeaders*/)/*: Promise<JSONValue | string>*/ => {
