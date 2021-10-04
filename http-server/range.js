@@ -77,7 +77,7 @@ export type RangeResponseHead = {
 }
 */
 
-export const getRangeResponseHead = (range/*: RequestRange*/, bodyLength/*: number*/)/*: RangeResponseHead*/ => {
+export const getRangeResponseHead = (range/*: ?RequestRange*/, bodyLength/*: number*/)/*: RangeResponseHead*/ => {
   if (!range)
     return { headers: { 'accept-ranges': 'bytes' } }
 
