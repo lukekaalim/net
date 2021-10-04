@@ -1,10 +1,9 @@
 // @flow strict
 /*::
-import type { HTTPStatus } from "../net-description/http";
-import type { HTTPHeaders } from "@lukekaalim/net-description";
-
-import { HTTP_STATUS } from "../net-description/http";
+import type { HTTPHeaders, HTTPStatus } from "@lukekaalim/net-description";
 */
+
+import { HTTP_STATUS } from "@lukekaalim/net-description";
 
 /*::
 
