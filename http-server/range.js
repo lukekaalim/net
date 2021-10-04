@@ -50,42 +50,45 @@ export const getRequestRange = (headers/*: HTTPHeaders*/)/*: ?RequestRange*/ => 
 };
 
 
-export const getRangeStartOffset = (body/*: Buffer*/, directive/*: RangeDirective*/)/*: number*/ => {
+export const getRangeStartOffset = (bodyLength/*: number*/, directive/*: RangeDirective*/)/*: number*/ => {
   const { start } = directive;
   switch (start.type) {
     case 'offset':
       return start.offset;
     case 'offset-from-end':
-      return body.byteLength - start.offset;
+      return bodyLength - start.offset;
   }
 };
-export const getRangeEndOffset = (body/*: Buffer*/, directive/*: RangeDirective*/)/*: number*/ => {
+export const getRangeEndOffset = (bodyLength/*: number*/, directive/*: RangeDirective*/)/*: number*/ => {
   const { end } = directive;
   switch (end.type) {
     case 'offset':
       return end.offset;
     case 'end-of-document':
-      return body.byteLength;
+      return bodyLength;
   }
 };
 
-// make sure to combine this with another response to add more details!
-export const writeRangeResponse = (range/*: ?RequestRange*/, body/*: Buffer*/)/*: { status: HTTPStatus, body: Buffer, headers: HTTPHeaders }*/ => {
-  // we only support singlepart ranges for now
+/*::
+export type RangeResponseHead = {
+  status?: HTTPStatus,
+  slice?: { start: number, end: number },
+  headers: HTTPHeaders
+}
+*/
+
+export const getRangeResponseHead = (range/*: RequestRange*/, bodyLength/*: number*/)/*: RangeResponseHead*/ => {
   if (!range)
-    return { status: HTTP_STATUS.ok, body, headers: { 'accept-ranges': 'bytes' } }
+    return { headers: { 'accept-ranges': 'bytes' } }
 
   const [directive] = range.directives;
-  const start = getRangeStartOffset(body, directive);
-  const end = getRangeEndOffset(body, directive);
-  const totalLength = body.byteLength;
-  const slicedBody = body.slice(start, end);
+  const start = getRangeStartOffset(bodyLength, directive);
+  const end = getRangeEndOffset(bodyLength, directive);
 
-  const contentRangeHeader = `bytes ${start}-${end - 1}/${totalLength}`;
+  const contentRangeHeader = `bytes ${start}-${end - 1}/${bodyLength}`;
   const headers = {
-    'content-length': slicedBody.byteLength.toString(),
+    'content-length': bodyLength.toString(),
     'content-range': contentRangeHeader
   }
-
-  return { status: HTTP_STATUS.partical_content, body: slicedBody, headers };
-};
+  return { headers, slice: { start, end }, status: HTTP_STATUS.partical_content };
+}
