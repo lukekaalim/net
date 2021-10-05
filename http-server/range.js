@@ -86,7 +86,7 @@ export const getRangeResponseHead = (range/*: ?RequestRange*/, bodyLength/*: num
 
   const contentRangeHeader = `bytes ${start}-${end - 1}/${bodyLength}`;
   const headers = {
-    'content-length': bodyLength.toString(),
+    'content-length': (end - start).toString(),
     'content-range': contentRangeHeader
   }
   return { headers, slice: { start, end }, status: HTTP_STATUS.partical_content };
