@@ -57,10 +57,19 @@ export const createResourceRoutes = (resource/*: HTTPResource*/)/*: Route[]*/ =>
       }
     };
   }
+  const headHandler = async (request) => {
+    const getHandler = resource.methods.GET;
+    if (!getHandler)
+      return await disallowedMethodHandler(request);
+
+    const response = await getHandler(request);
+    return { ...response, body: null };
+  };
 
   const defaultMethods/*: [string, RouteHandler][]*/ = [
     ...Object.values(HTTP_METHOD).map(method => [(method/*: any*/), disallowedMethodHandler]),
-    [HTTP_METHOD.options, optionsHandler]
+    [HTTP_METHOD.options, optionsHandler],
+    [HTTP_METHOD.head, headHandler],
   ];
 
   // Wrap the provided route handler with

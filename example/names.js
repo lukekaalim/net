@@ -53,6 +53,7 @@ const createNamesClient = (origin, token) => {
   const resource = createJSONResourceClient(namesDescription, httpClient, origin);
   
   const getAllNames = async () => {
+    console.log(await httpClient.sendRequest({ method: 'HEAD', url: new URL('/names', origin), headers: {} }))
     const { body: names, headers } = await resource.GET({ headers: { hello: 'world' }});
     console.log(headers);
     return names;
