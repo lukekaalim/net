@@ -114,11 +114,11 @@ export type ResourceResponse<Body> = {
   status: HTTPStatus,
 };
 
-type RequestHandler<T> = (request: ResourceRequest<T['query'], T['request']>) =>
+export type RequestHandler<T> = (request: ResourceRequest<T['query'], T['request']>) =>
   | ResourceResponse<T['response']>
   | Promise<ResourceResponse<T['response']>>
 
-type ResourceImplementation<T> = {|
+export type ResourceImplementation<T> = {|
   access?: AccessOptions,
   cache?: CacheOptions,
 
