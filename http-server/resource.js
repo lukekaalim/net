@@ -122,11 +122,11 @@ export type ResourceImplementation<T> = {|
   access?: AccessOptions,
   cache?: CacheOptions,
 
-  GET?:     RequestHandler<T['GET']>,
-  POST?:    RequestHandler<T['POST']>,
-  DELETE?:  RequestHandler<T['DELETE']>,
-  PUT?:     RequestHandler<T['PUT']>,
-  PATCH?:   RequestHandler<T['PATCH']>,
+  GET?:     ?RequestHandler<T['GET']>,
+  POST?:    ?RequestHandler<T['POST']>,
+  DELETE?:  ?RequestHandler<T['DELETE']>,
+  PUT?:     ?RequestHandler<T['PUT']>,
+  PATCH?:   ?RequestHandler<T['PATCH']>,
 |};
 */
 
