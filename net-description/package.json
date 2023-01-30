@@ -4,6 +4,7 @@
   "description": "Describe various internet resources, for consuming or implementing.",
   "main": "main.js",
   "type": "module",
+  "types": "main.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "postversion": "../postversion.sh"
@@ -19,6 +20,6 @@
   },
   "homepage": "https://github.com/lukekaalim/net#readme",
   "dependencies": {
-    "@lukekaalim/cast": "^4.0.0"
+    "@lukekaalim/cast": "^4.3.4"
   }
 }

@@ -6,9 +6,9 @@ import { createFixedListener, listenServer } from "@lukekaalim/http-server";
 import { createObjectCaster, castString, createConstantCaster, createKeyedUnionCaster } from '@lukekaalim/cast';
 
 import { createServer } from 'http';
-import { WebSocket, WebSocketServer } from 'ws';
+import { WebSocketServer } from 'ws';
 import { createWebSocketListener, createJSONConnectionRoute } from '@lukekaalim/ws-server';
-import { createJSONConnectionClient } from '@lukekaalim/ws-client';
+import { createJSONWebSocketClient } from '@lukekaalim/ws-client';
 
 /*::
 export type ChatMessage = {|
@@ -63,7 +63,11 @@ const createChatRoomServer = () => {
 };
 
 const createChatRoomClient = async (baseURL, roomId, user) => {
-  const client = createJSONConnectionClient(WebSocket, chatRoomConnectionDescription, baseURL);
+  const client = createJSONWebSocketClient(
+    (url, subprotocols) => new WebSocket(url, subprotocols),
+    chatRoomConnectionDescription,
+    baseURL
+  );
   
   const recieve = (message) => {
     switch (message.type) {

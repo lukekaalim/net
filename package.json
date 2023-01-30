@@ -21,6 +21,6 @@
   },
   "homepage": "https://github.com/lukekaalim/net#readme",
   "devDependencies": {
-    "flow-bin": "^0.160.1"
+    "flow-bin": "^0.198.2"
   }
 }

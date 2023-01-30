@@ -14,7 +14,7 @@ export type ConnectionDescription<T: Connection<>> = {|
   path: string,
   subprotocol?: string,
 
-  castQuery?:       Cast<T['query']>,
+  castQuery?:         Cast<T['query']>,
   castServerMessage?: Cast<T['server']>,
   castClientMessage?: Cast<T['client']>,
 |};

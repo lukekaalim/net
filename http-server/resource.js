@@ -142,20 +142,28 @@ export const createJSONResourceRoutes = /*:: <T: Resource>*/(
 
     const routeHandler = async (routeRequest) => {
       const query = toQuery && toQuery(Object.fromEntries(routeRequest.query.entries()));
-      const requestBody = toRequestBody && toRequestBody(await readJSONBody(routeRequest.incoming, routeRequest.headers));
-      const methodRequest = {
-        query,
-        headers: routeRequest.headers,
-        body: requestBody,
-        routeRequest
-      };
-      const methodResponse = await methodImplementation(methodRequest);
-      const {
-        body: responseBody,
-        status,
-        headers: responseHeaders = {}
-      } = methodResponse;
-      return createJSONResponse(status, responseBody || null, responseHeaders);
+      try {
+        const requestBody = toRequestBody && toRequestBody(await readJSONBody(routeRequest.incoming, routeRequest.headers));
+        const methodRequest = {
+          query,
+          headers: routeRequest.headers,
+          body: requestBody,
+          routeRequest
+        };
+        try {
+          const methodResponse = await methodImplementation(methodRequest);
+          const {
+            body: responseBody,
+            status,
+            headers: responseHeaders = {}
+          } = methodResponse;
+          return createJSONResponse(status, responseBody || null, responseHeaders);
+        } catch (error) {
+          return createJSONResponse(HTTP_STATUS.internal_server_error, { name: error.name, message: error.message })
+        }
+      } catch (error) {
+        return createJSONResponse(HTTP_STATUS.bad_request, { name: error.name, message: error.message })
+      }
     };
     return routeHandler;
   };

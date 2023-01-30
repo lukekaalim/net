@@ -33,14 +33,16 @@ declare module "ws" {
   declare export class WebSocket {
     constructor(address: string | URL, protocols?: string[], options?: WebSocketOptions): WebSocket;
 
-    addEventListener('message', cb: ({ data: Uint8Array, isBinary: boolean }) => void): void;
-    addEventListener('ping', cb: ({ data: Uint8Array }) => void): void;
-    addEventListener('pong', cb: ({ data: Uint8Array }) => void): void;
-    addEventListener('open', cb: () => void): void;
-    addEventListener('close', cb: () => void): void;
-    removeEventListener('message', cb: ({ data: Uint8Array, isBinary: boolean }) => void): void;
-    removeEventListener('open', cb: ({ data: Uint8Array, isBinary: boolean }) => void): void;
-    removeEventListener('close', cb: ({ data: Uint8Array, isBinary: boolean }) => void): void;
+    addEventListener('message', cb: (event: MessageEvent & { data: Buffer | Buffer[], isBinary: boolean }) => mixed): void;
+    addEventListener('ping', cb: ({ data: Uint8Array }) => mixed): void;
+    addEventListener('error', cb: ({ code: number }) => mixed): void;
+    addEventListener('pong', cb: ({ data: Uint8Array }) => mixed): void;
+    addEventListener('open', cb: (event: Event) => mixed): void;
+    addEventListener('close', cb: (event: CloseEvent) => mixed): void;
+    removeEventListener('message', cb: ({ data: Uint8Array, isBinary: boolean }) => mixed): void;
+    removeEventListener('open', cb: ({ data: Uint8Array, isBinary: boolean }) => mixed): void;
+    removeEventListener('close', cb: ({ data: Uint8Array, isBinary: boolean }) => mixed): void;
+    removeEventListener('error', cb: ({ code: number }) => mixed): void;
     
     close(code: number, reason: string): void;
     send(data: string | Uint8Array, options?: WebSocketSendOptions, cb?: (error?: Error) => void): void;

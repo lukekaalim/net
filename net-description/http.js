@@ -25,6 +25,8 @@ export const HTTP_STATUS = {
   expectation_failed: 417,
   upgrade_required: 426,
   too_many_requests: 429,
+  // server error
+  internal_server_error: 500
 };
 
 /*::
