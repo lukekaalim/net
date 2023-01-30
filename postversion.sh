@@ -6,7 +6,7 @@ tag="$name@$version"
 
 (cd ..; npm i;)
 
-git add .
+git add ..
 git commit -m $tag
 git tag -a $tag -m "Publied version $version of $name"
 
