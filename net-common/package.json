@@ -1,9 +1,11 @@
 {
-  "name": "example",
-  "version": "1.0.0",
-  "description": "",
-  "main": "simpleApi.js",
+  "name": "@lukekaalim/net-common",
+  "version": "0.1.0",
+  "description": "Some common utilities shared between net",
+  "main": "index.js",
   "type": "module",
+  "types": "index.d.ts",
+  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -16,10 +18,5 @@
   "bugs": {
     "url": "https://github.com/lukekaalim/net/issues"
   },
-  "homepage": "https://github.com/lukekaalim/net#readme",
-  "dependencies": {
-    "@lukekaalim/cast": "^4.0.0",
-    "ts-node": "^10.9.1",
-    "ws": "^8.2.2"
-  }
+  "homepage": "https://github.com/lukekaalim/net#readme"
 }

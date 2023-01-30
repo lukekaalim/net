@@ -1,15 +1,13 @@
 import { ConnectionDescription, ConnectionTypeTriplet } from "@lukekaalim/net-description";
-import { Publisher } from "./publisher";
-import { ISocket } from "./socket";
+import { Publisher } from "@lukekaalim/net-common";
+import { ISocket } from "./socket.js";
 
 export type ConnectionSocket<T extends ConnectionTypeTriplet> = {
+  socket: ISocket,
+
   send: (message: T["client"]) => void,
   close: (code: number, reason: string) => void,
-
-  messagePublisher: Publisher<{ data: T["server"], event: Event }>,
-  openPublisher: Publisher<{ event: Event }>,
-  closePublisher: Publisher<{ event: CloseEvent }>,
-  errorPublisher: Publisher<{ event: Event }>,
+  message: Publisher<{ data: T["server"] }>,
 }
 
 export type ConnectionClient<T extends ConnectionTypeTriplet> = {

@@ -3,8 +3,8 @@
 import type { IMessageEvent, ISocket } from "./socket";
 import type { ConnectionDescription, Connection } from '@lukekaalim/net-description';
 */
-import { getMessageDataString } from "./data";
-import { createEventPublisher } from "./publisher";
+import { getMessageDataString } from "./data.js";
+import { createEventPublisher } from "@lukekaalim/net-common";
 
 /*::
 export type Publisher<T> = {

@@ -1,9 +1,9 @@
 // @flow strict
 
-import { createEventPublisher } from "./publisher";
+import { createEventPublisher } from "@lukekaalim/net-common";
 
 /*::
-import type { EventPublisher, Publisher } from "./publisher";
+import type { EventPublisher, Publisher } from "@lukekaalim/net-common";
 import type { WebSocket as WSWebSocket } from 'ws';
 
 export interface IEvent {

@@ -13,7 +13,7 @@ export type WebSocketListener = (
 
 export const createWebSocketListener = (routes/*: WebSocketRoute[]*/)/*: WebSocketListener*/ => {
   const routeByPath = new Map(routes.map(route => [route.path, route]));
-  const listener = (socket, request) => {
+  const listener = (socket/*: WebSocket*/, request/*: IncomingMessage | SIncomingMessage*/) => {
     const url = new URL(request.url, 'http://example.com');
     const route = routeByPath.get(url.pathname);
     if (!route)

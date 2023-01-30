@@ -1,3 +1,2 @@
-export * from './connection';
-export * from './publisher';
-export * from './socket';
+export * from './connection.js';
+export * from './socket.js';
