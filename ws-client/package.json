@@ -3,6 +3,7 @@
   "version": "2.1.0",
   "description": "",
   "main": "entry.js",
+  "types": "entry.d.ts",
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -19,6 +20,8 @@
   },
   "homepage": "https://github.com/lukekaalim/net#readme",
   "dependencies": {
-    "@lukekaalim/net-description": "^1.3.0"
+    "@lukekaalim/net-description": "^1.3.0",
+    "ws": "^8.12.0",
+    "@types/ws": "^8.5.4"
   }
 }
