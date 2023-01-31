@@ -1,6 +1,6 @@
 {
   "name": "@lukekaalim/ws-server",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "",
   "main": "entry.js",
   "type": "module",
