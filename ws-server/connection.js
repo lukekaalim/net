@@ -30,18 +30,23 @@ export const createJSONConnectionRoute = /*:: <T: Connection<>>*/(
     const recievePublisher = createEventPublisher();
 
     const onMessage = (message/*: MessageEvent & { data: Buffer | Buffer[], isBinary: boolean }*/) => {
-      if (!castClientMessage)
-        return;
-      const { data } = message;
-      if (data instanceof Buffer) {
-        const clientMessage = JSON.parse(data.toString('utf-8'));
-        return recievePublisher.publish(castClientMessage(clientMessage));
+      try {
+        if (!castClientMessage)
+          return;
+        const { data } = message;
+        if (data instanceof Buffer) {
+          const clientMessage = JSON.parse(data.toString('utf-8'));
+          return recievePublisher.publish(castClientMessage(clientMessage));
+        }
+        if (typeof data === 'string') {
+          const clientMessage = JSON.parse(data);
+          return recievePublisher.publish(castClientMessage(clientMessage));
+        }
+        throw new Error();
+      } catch (error) {
+        console.error('Invalid socket message')
+        console.error(error);
       }
-      if (typeof data === 'string') {
-        const clientMessage = JSON.parse(data);
-        return recievePublisher.publish(castClientMessage(clientMessage));
-      }
-      throw new Error();
     }
     socket.addEventListener('message', onMessage);
     

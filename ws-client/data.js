@@ -16,6 +16,9 @@ export const getMessageDataString = async (event/*: { +data: mixed } | IData*/)/
 
   if (typeof Buffer !== 'undefined' && data instanceof Buffer)
     return data.toString('utf-8');
+
+  if (typeof ArrayBuffer !== 'undefined' && typeof TextDecoder !== 'undefined' && data instanceof ArrayBuffer)
+    return new TextDecoder().decode(data)
     
-  throw new Error();
+  throw new Error('No appropriate data handler to parse message data string');
 };

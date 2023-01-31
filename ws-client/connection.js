@@ -41,11 +41,15 @@ export const createJSONWebSocketClient = /*:: <T: Connection<>>*/(
 
     const socket = createSocket(url.href, [description.subprotocol].filter(Boolean));
     socket.messagePublisher.subscribe(async (event/*: IMessageEvent*/) => {
-      if (!castServerMessage)
-        return;
-      const dataString = await getMessageDataString(event);
-      const data = castServerMessage(JSON.parse(dataString));
-      message.publish({ data });
+      try {
+        if (!castServerMessage)
+          return;
+        const dataString = await getMessageDataString(event);
+        const data = castServerMessage(JSON.parse(dataString));
+        message.publish({ data });
+      } catch (error) {
+        console.error(error);
+      }
     });
 
     const send = (message/*: T["client"]*/) => {
